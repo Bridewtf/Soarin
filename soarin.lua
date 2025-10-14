@@ -68,7 +68,7 @@ local function toggleVehicleUnlocker()
         MachoMenuNotification("Soarin.lua", "Vehicle Unlocker Disabled.", 3)
     end
 end
-
+--cum test
 local function inject(code)
     MachoInjectResource("any", code)
 end
