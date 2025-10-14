@@ -1,4 +1,4 @@
-local DuiUrl = "https://raw.githack.com/Bridewtf/Soarin/main/soarin.html"
+local DuiUrl = "https://raw.githubusercontent.com/Bridewtf/Soarin/main/soarin.html"
 
 local Dui = MachoCreateDui(DuiUrl)
 local MenuOpen = false
