@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Soarin Menu</title>
+  <style>
+    :root {
+      --bg: rgba(10, 10, 10, 0.85);
+      --card-bg: rgba(25, 25, 25, 0.9);
+      --accent: #00bfff;
+      --text: #fff;
+      --text-muted: #aaa;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .menu {
+      width: 500px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      transition: all 0.25s ease;
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .menu.hidden {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      color: var(--accent);
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+
+    .button {
+      display: block;
+      width: 100%;
+      padding: 12px 0;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      background: var(--accent);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.25s;
+    }
+
+    .button:hover {
+      background: #009ad6;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .status span {
+      color: var(--accent);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="menu fade-in" id="menu">
+    <h1>Soarin Menu</h1>
+    <button class="button" onclick="toggleESP()">Toggle ESP</button>
+    <button class="button" onclick="toggleCrosshair()">Toggle Crosshair</button>
+    <button class="button" onclick="toggleIDs()">Toggle IDs</button>
+    <button class="button" onclick="closeMenu()">Close Menu</button>
+    <div class="status">Status: <span id="statusText">Waiting for Lua...</span></div>
+  </div>
+
+  <script>
+    const statusText = document.getElementById("statusText");
+    const menu = document.getElementById("menu");
+
+    // handle messages from Lua
+    window.addEventListener("message", (event) => {
+      console.log("Received from Lua:", event.data);
+      if (event.data && event.data.status) {
+        statusText.innerText = event.data.status;
+      }
+    });
+
+    // send message to Lua
+    function post(action) {
+      window.parent.postMessage({ action }, "*");
+      statusText.innerText = `Sent: ${action}`;
+    }
+
+    function toggleESP() {
+      post("toggleESP");
+    }
+
+    function toggleCrosshair() {
+      post("toggleCrosshair");
+    }
+
+    function toggleIDs() {
+      post("toggleIDs");
+    }
+
+    function closeMenu() {
+      menu.classList.add("hidden");
+      post("closeMenu");
+    }
+  </script>
+</body>
+</html>
